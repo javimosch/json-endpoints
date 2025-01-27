@@ -8,6 +8,7 @@ import Index from "./pages/Index";
 import Agents from "./pages/Agents";
 import Tools from "./pages/Tools";
 import Models from "./pages/Models";
+import TestAgent from "./pages/TestAgent";
 
 const queryClient = new QueryClient();
 
@@ -23,6 +24,7 @@ const App = () => (
             <Route path="/agents" element={<Agents />} />
             <Route path="/tools" element={<Tools />} />
             <Route path="/models" element={<Models />} />
+            <Route path="/test-agent" element={<TestAgent />} />
           </Routes>
         </Layout>
       </BrowserRouter>

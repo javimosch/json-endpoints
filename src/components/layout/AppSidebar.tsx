@@ -1,50 +1,74 @@
-import { Bot, Wrench, Brain, Home } from "lucide-react";
+import { Bot, Wrench, Brain, Home, MessageSquare } from "lucide-react";
 import { useLocation, Link } from "react-router-dom";
 import {
-  Sidebar,
-  SidebarContent,
-  SidebarGroup,
-  SidebarGroupContent,
-  SidebarGroupLabel,
-  SidebarMenu,
-  SidebarMenuButton,
-  SidebarMenuItem,
-} from "@/components/ui/sidebar";
+  Sheet,
+  SheetContent,
+  SheetHeader,
+  SheetTitle,
+  SheetTrigger,
+} from "@/components/ui/sheet";
+import { Button } from "@/components/ui/button";
+import { useMobile } from "@/hooks/use-mobile";
 
-const items = [
-  { title: "Dashboard", url: "/", icon: Home },
-  { title: "Agents", url: "/agents", icon: Bot },
-  { title: "Tools", url: "/tools", icon: Wrench },
-  { title: "Models", url: "/models", icon: Brain },
+const navigation = [
+  { name: "Home", href: "/", icon: Home },
+  { name: "Agents", href: "/agents", icon: Bot },
+  { name: "Tools", href: "/tools", icon: Wrench },
+  { name: "Models", href: "/models", icon: Brain },
+  { name: "Test Agent", href: "/test-agent", icon: MessageSquare },
 ];
 
 export function AppSidebar() {
   const location = useLocation();
+  const isMobile = useMobile();
 
   return (
-    <Sidebar>
-      <SidebarContent>
-        <SidebarGroup>
-          <SidebarGroupLabel>Navigation</SidebarGroupLabel>
-          <SidebarGroupContent>
-            <SidebarMenu>
-              {items.map((item) => (
-                <SidebarMenuItem key={item.title}>
-                  <SidebarMenuButton
-                    asChild
-                    className={location.pathname === item.url ? "bg-sidebar-accent" : ""}
-                  >
-                    <Link to={item.url} className="flex items-center gap-2">
-                      <item.icon className="h-4 w-4" />
-                      <span>{item.title}</span>
-                    </Link>
-                  </SidebarMenuButton>
-                </SidebarMenuItem>
-              ))}
-            </SidebarMenu>
-          </SidebarGroupContent>
-        </SidebarGroup>
-      </SidebarContent>
-    </Sidebar>
+    <div className="flex flex-col w-64 bg-background border-r border-muted">
+      <div className="flex items-center justify-between p-4">
+        <h1 className="text-lg font-bold">My App</h1>
+        {isMobile && (
+          <Sheet>
+            <SheetTrigger asChild>
+              <Button variant="outline">Menu</Button>
+            </SheetTrigger>
+            <SheetContent>
+              <SheetHeader>
+                <SheetTitle>Menu</SheetTitle>
+              </SheetHeader>
+              <div className="flex flex-col">
+                {navigation.map((item) => (
+                  <Link key={item.name} to={item.href}>
+                    <Button
+                      variant={location.pathname === item.href ? "default" : "ghost"}
+                      className="w-full text-left"
+                    >
+                      <item.icon className="mr-2" />
+                      {item.name}
+                    </Button>
+                  </Link>
+                ))}
+              </div>
+            </SheetContent>
+          </Sheet>
+        )}
+      </div>
+      <nav className="flex-1">
+        <ul className="flex flex-col">
+          {navigation.map((item) => (
+            <li key={item.name}>
+              <Link to={item.href}>
+                <Button
+                  variant={location.pathname === item.href ? "default" : "ghost"}
+                  className="w-full text-left"
+                >
+                  <item.icon className="mr-2" />
+                  {item.name}
+                </Button>
+              </Link>
+            </li>
+          ))}
+        </ul>
+      </nav>
+    </div>
   );
 }
