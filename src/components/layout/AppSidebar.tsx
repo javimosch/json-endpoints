@@ -1,4 +1,4 @@
-import { Bot, Tool, Brain, Home } from "lucide-react";
+import { Bot, Wrench, Brain, Home } from "lucide-react";
 import { useLocation, Link } from "react-router-dom";
 import {
   Sidebar,
@@ -14,7 +14,7 @@ import {
 const items = [
   { title: "Dashboard", url: "/", icon: Home },
   { title: "Agents", url: "/agents", icon: Bot },
-  { title: "Tools", url: "/tools", icon: Tool },
+  { title: "Tools", url: "/tools", icon: Wrench },
   { title: "Models", url: "/models", icon: Brain },
 ];
 

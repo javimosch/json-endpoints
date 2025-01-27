@@ -1,5 +1,5 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Bot, Tool, Brain } from "lucide-react";
+import { Bot, Wrench, Brain } from "lucide-react";
 import { Link } from "react-router-dom";
 
 const Index = () => {
@@ -13,7 +13,7 @@ const Index = () => {
     {
       title: "Tools",
       description: "Configure agent tools",
-      icon: Tool,
+      icon: Wrench,
       link: "/tools",
     },
     {
