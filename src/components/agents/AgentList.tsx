@@ -1,12 +1,31 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Pencil, Trash2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
 
 export function AgentList() {
   // This is a mock implementation - we'll need to integrate with actual data storage later
   const agents = [
-    { id: 1, name: "Assistant", description: "General purpose AI assistant" },
-    { id: 2, name: "Researcher", description: "Specialized in research tasks" },
+    { 
+      id: 1, 
+      name: "Assistant", 
+      description: "General purpose AI assistant",
+      model: { name: "GPT-4" },
+      tools: [
+        { name: "Web Search" },
+        { name: "Calculator" }
+      ]
+    },
+    { 
+      id: 2, 
+      name: "Researcher", 
+      description: "Specialized in research tasks",
+      model: { name: "Claude" },
+      tools: [
+        { name: "Web Search" },
+        { name: "Code Interpreter" }
+      ]
+    },
   ];
 
   return (
@@ -24,8 +43,24 @@ export function AgentList() {
               </Button>
             </div>
           </CardHeader>
-          <CardContent>
+          <CardContent className="space-y-4">
             <p className="text-muted-foreground">{agent.description}</p>
+            
+            <div>
+              <p className="text-sm font-medium mb-2">Model</p>
+              <Badge variant="secondary">{agent.model.name}</Badge>
+            </div>
+
+            <div>
+              <p className="text-sm font-medium mb-2">Tools</p>
+              <div className="flex flex-wrap gap-2">
+                {agent.tools.map((tool, index) => (
+                  <Badge key={index} variant="outline">
+                    {tool.name}
+                  </Badge>
+                ))}
+              </div>
+            </div>
           </CardContent>
         </Card>
       ))}
