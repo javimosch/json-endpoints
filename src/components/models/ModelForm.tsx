@@ -9,6 +9,18 @@ import { Textarea } from "@/components/ui/textarea";
 const formSchema = z.object({
   name: z.string().min(2, "Name must be at least 2 characters"),
   description: z.string().min(10, "Description must be at least 10 characters"),
+  baseURL: z.string().url("Must be a valid URL"),
+  modelName: z.string().min(1, "Model name is required"),
+  temperature: z.string().regex(/^\d*\.?\d*$/, "Must be a valid number between 0 and 1"),
+  otherParams: z.string().refine((value) => {
+    try {
+      if (value === '') return true;
+      JSON.parse(value);
+      return true;
+    } catch {
+      return false;
+    }
+  }, "Must be valid JSON"),
 });
 
 type ModelFormProps = {
@@ -21,6 +33,10 @@ export function ModelForm({ onSuccess }: ModelFormProps) {
     defaultValues: {
       name: "",
       description: "",
+      baseURL: "",
+      modelName: "",
+      temperature: "0.7",
+      otherParams: "",
     },
   });
 
@@ -46,6 +62,7 @@ export function ModelForm({ onSuccess }: ModelFormProps) {
             </FormItem>
           )}
         />
+
         <FormField
           control={form.control}
           name="description"
@@ -59,6 +76,73 @@ export function ModelForm({ onSuccess }: ModelFormProps) {
             </FormItem>
           )}
         />
+
+        <FormField
+          control={form.control}
+          name="baseURL"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Base URL</FormLabel>
+              <FormControl>
+                <Input placeholder="Enter completion base URL" {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+
+        <FormField
+          control={form.control}
+          name="modelName"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Model Name</FormLabel>
+              <FormControl>
+                <Input placeholder="Enter model name" {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+
+        <FormField
+          control={form.control}
+          name="temperature"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Temperature</FormLabel>
+              <FormControl>
+                <Input 
+                  type="number" 
+                  step="0.1" 
+                  min="0" 
+                  max="1" 
+                  placeholder="Enter temperature (0-1)" 
+                  {...field} 
+                />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+
+        <FormField
+          control={form.control}
+          name="otherParams"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Other Parameters (JSON)</FormLabel>
+              <FormControl>
+                <Textarea 
+                  placeholder='Enter additional parameters as JSON (e.g., {"max_tokens": 100})' 
+                  {...field} 
+                />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+
         <Button type="submit" className="w-full">Create Model</Button>
       </form>
     </Form>
