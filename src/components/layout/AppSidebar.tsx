@@ -8,7 +8,7 @@ import {
   SheetTrigger,
 } from "@/components/ui/sheet";
 import { Button } from "@/components/ui/button";
-import { useMobile } from "@/hooks/use-mobile";
+import { useIsMobile } from "@/hooks/use-mobile";
 
 const navigation = [
   { name: "Home", href: "/", icon: Home },
@@ -20,7 +20,7 @@ const navigation = [
 
 export function AppSidebar() {
   const location = useLocation();
-  const isMobile = useMobile();
+  const isMobile = useIsMobile();
 
   return (
     <div className="flex flex-col w-64 bg-background border-r border-muted">
