@@ -1,5 +1,5 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Bot, Wrench, Brain } from "lucide-react";
+import { Bot, Wrench, Brain, MessageSquare, Code } from "lucide-react";
 import { Link } from "react-router-dom";
 
 const Index = () => {
@@ -21,6 +21,18 @@ const Index = () => {
       description: "Manage LLM models",
       icon: Brain,
       link: "/models",
+    },
+    {
+      title: "Test Agent",
+      description: "Test your agents in a chat interface",
+      icon: MessageSquare,
+      link: "/test-agent",
+    },
+    {
+      title: "Embed Chat",
+      description: "Get code snippets to embed chat",
+      icon: Code,
+      link: "/embed-chat",
     },
   ];
 
