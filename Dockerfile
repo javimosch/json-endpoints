@@ -22,7 +22,7 @@ WORKDIR /app
 
 # Copy server files
 COPY --from=builder /app/server/deno.json /app/server/
-COPY --from=builder /app/server/index.ts /app/server/
+COPY --from=builder /app/server/ /app/server/
 
 # Copy frontend build
 COPY --from=builder /app/dist ./dist
@@ -37,4 +37,4 @@ ENV NODE_ENV=production
 RUN cd server && deno cache index.ts
 
 # Start the server
-CMD ["deno", "run", "--allow-net", "--allow-read", "--allow-env", "server/index.ts"]
+CMD ["deno", "run", "--allow-net", "--allow-read", "--allow-env","--allow-sys", "server/index.ts"]

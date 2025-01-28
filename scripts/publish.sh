@@ -9,7 +9,7 @@ TAG="latest"
 
 # Build the Docker image
 echo "Building Docker image..."
-docker build -t $IMAGE_NAME:$TAG .
+docker build -t $IMAGE_NAME:$TAG . --no-cache
 
 # Tag the image
 echo "Tagging image as $IMAGE_NAME:$TAG"
