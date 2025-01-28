@@ -12,8 +12,20 @@ import TestAgent from "./pages/TestAgent";
 import EmbedChat from "./pages/EmbedChat";
 import ApiKeys from "./pages/ApiKeys";
 import Billing from "./pages/Billing";
+import JsonEndpoints from "./pages/JsonEndpoints";
 
 const queryClient = new QueryClient();
+
+/**
+ *  <Route path="/" element={<Index />} />
+            <Route path="/agents" element={<Agents />} />
+            <Route path="/tools" element={<Tools />} />
+            <Route path="/models" element={<Models />} />
+            <Route path="/test-agent" element={<TestAgent />} />
+            <Route path="/embed-chat" element={<EmbedChat />} />
+            <Route path="/api-keys" element={<ApiKeys />} />
+            <Route path="/billing" element={<Billing />} />
+ */
 
 const App = () => (
   <QueryClientProvider client={queryClient}>
@@ -23,14 +35,8 @@ const App = () => (
       <BrowserRouter>
         <Layout>
           <Routes>
-            <Route path="/" element={<Index />} />
-            <Route path="/agents" element={<Agents />} />
-            <Route path="/tools" element={<Tools />} />
-            <Route path="/models" element={<Models />} />
-            <Route path="/test-agent" element={<TestAgent />} />
-            <Route path="/embed-chat" element={<EmbedChat />} />
-            <Route path="/api-keys" element={<ApiKeys />} />
-            <Route path="/billing" element={<Billing />} />
+            <Route path="/" element={<JsonEndpoints />} />
+       
           </Routes>
         </Layout>
       </BrowserRouter>

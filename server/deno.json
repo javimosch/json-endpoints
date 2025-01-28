@@ -1,0 +1,10 @@
+{
+  "tasks": {
+    "start": "deno run --allow-net --allow-read --allow-env --allow-sys index.ts"
+  },
+  "imports": {
+    "oak": "https://deno.land/x/oak@v12.6.1/mod.ts",
+    "mongoose": "npm:mongoose@^7.6.3",
+    "dotenv": "https://deno.land/std@0.208.0/dotenv/mod.ts"
+  }
+}

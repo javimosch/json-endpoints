@@ -1,0 +1,1 @@
+MONGODB_URI=mongodb://root:xxx@host:27017/json_endpoints?authSource=admin
