@@ -1,4 +1,4 @@
-import { Bot, Wrench, Brain, Home, MessageSquare } from "lucide-react";
+import { Bot, Wrench, Brain, Home, MessageSquare, Code } from "lucide-react";
 import { useLocation, Link } from "react-router-dom";
 import {
   Sheet,
@@ -16,6 +16,7 @@ const navigation = [
   { name: "Tools", href: "/tools", icon: Wrench },
   { name: "Models", href: "/models", icon: Brain },
   { name: "Test Agent", href: "/test-agent", icon: MessageSquare },
+  { name: "Embed Chat", href: "/embed-chat", icon: Code },
 ];
 
 export function AppSidebar() {

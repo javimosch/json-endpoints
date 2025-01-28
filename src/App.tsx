@@ -9,6 +9,7 @@ import Agents from "./pages/Agents";
 import Tools from "./pages/Tools";
 import Models from "./pages/Models";
 import TestAgent from "./pages/TestAgent";
+import EmbedChat from "./pages/EmbedChat";
 
 const queryClient = new QueryClient();
 
@@ -25,6 +26,7 @@ const App = () => (
             <Route path="/tools" element={<Tools />} />
             <Route path="/models" element={<Models />} />
             <Route path="/test-agent" element={<TestAgent />} />
+            <Route path="/embed-chat" element={<EmbedChat />} />
           </Routes>
         </Layout>
       </BrowserRouter>
