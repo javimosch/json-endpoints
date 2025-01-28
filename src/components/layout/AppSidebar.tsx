@@ -1,4 +1,4 @@
-import { Bot, Wrench, Brain, Home, MessageSquare, Code } from "lucide-react";
+import { Bot, Wrench, Brain, Home, MessageSquare, Code, Key, CreditCard, LogOut } from "lucide-react";
 import { useLocation, Link } from "react-router-dom";
 import {
   Sheet,
@@ -17,11 +17,18 @@ const navigation = [
   { name: "Models", href: "/models", icon: Brain },
   { name: "Test Agent", href: "/test-agent", icon: MessageSquare },
   { name: "Embed Chat", href: "/embed-chat", icon: Code },
+  { name: "API Keys", href: "/api-keys", icon: Key },
+  { name: "Billing", href: "/billing", icon: CreditCard },
 ];
 
 export function AppSidebar() {
   const location = useLocation();
   const isMobile = useIsMobile();
+
+  const handleLogout = () => {
+    // TODO: Implement logout functionality
+    console.log("Logout clicked");
+  };
 
   return (
     <div className="flex flex-col w-64 bg-background border-r border-muted">
@@ -70,6 +77,16 @@ export function AppSidebar() {
           ))}
         </ul>
       </nav>
+      <div className="p-4 border-t border-muted">
+        <Button
+          variant="ghost"
+          className="w-full text-left text-red-500 hover:text-red-600 hover:bg-red-50"
+          onClick={handleLogout}
+        >
+          <LogOut className="mr-2" />
+          Logout
+        </Button>
+      </div>
     </div>
   );
 }

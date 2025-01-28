@@ -10,6 +10,8 @@ import Tools from "./pages/Tools";
 import Models from "./pages/Models";
 import TestAgent from "./pages/TestAgent";
 import EmbedChat from "./pages/EmbedChat";
+import ApiKeys from "./pages/ApiKeys";
+import Billing from "./pages/Billing";
 
 const queryClient = new QueryClient();
 
@@ -27,6 +29,8 @@ const App = () => (
             <Route path="/models" element={<Models />} />
             <Route path="/test-agent" element={<TestAgent />} />
             <Route path="/embed-chat" element={<EmbedChat />} />
+            <Route path="/api-keys" element={<ApiKeys />} />
+            <Route path="/billing" element={<Billing />} />
           </Routes>
         </Layout>
       </BrowserRouter>
