@@ -24,6 +24,10 @@ router.post("/api/rpc", async (ctx) => {
   const referer = ctx.request.headers.get('referer');
   const whitelist = Deno.env.get('REFERER_WHITELIST')?.split(',') || [];
 
+  console.log('REFERER_WHITELIST',{
+    whitelist
+  })
+
   if (whitelist.length > 0 && !whitelist.some(domain => referer?.startsWith(`https://${domain}`))) {
     ctx.response.status = 401;
     ctx.response.body = { error: "Unauthorized: Only whitelisted requests allowed" };
