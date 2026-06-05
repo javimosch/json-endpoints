@@ -26,7 +26,4 @@ export default defineConfig(({ mode }) => ({
       "@": path.resolve(__dirname, "./src"),
     },
   },
-  define: {
-    'import.meta.env.VITE_API_KEY': JSON.stringify(process.env.API_KEY || '3d9a997beaabbbd88a1cd7794f0672c25a30c47865cdd83d70d744fe3555d2ab'),
-  },
 }));

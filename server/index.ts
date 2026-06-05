@@ -74,8 +74,21 @@ app.use(async (ctx, next) => {
   // Require API key for all API routes
   if (ctx.request.url.pathname.startsWith('/api')) {
     const providedKey = ctx.request.headers.get('x-api-key');
+    const referer = ctx.request.headers.get('referer');
+    const host = ctx.request.headers.get('host');
+    
+    // Check if request is from same origin (frontend)
+    const isSameOrigin = referer && host && referer.includes(host);
+    
+    // Skip API key check for same-origin requests (from frontend)
+    if (isSameOrigin) {
+      await next();
+      return;
+    }
+    
+    // For cross-origin requests, require API key
     if (!API_KEY) {
-      console.warn('API_KEY not set in environment - allowing all requests (INSECURE)');
+      console.warn('API_KEY not set in environment - allowing all cross-origin requests (INSECURE)');
       await next();
       return;
     }

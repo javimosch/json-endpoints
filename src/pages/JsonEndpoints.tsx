@@ -25,9 +25,6 @@ export default function JsonEndpoints() {
     setIsLoading(true);
     try {
       const headers: Record<string, string> = { "Content-Type": "application/json" };
-      if (import.meta.env.VITE_API_KEY) {
-        headers["X-API-Key"] = import.meta.env.VITE_API_KEY;
-      }
       
       const response = await fetch("/api/rpc", {
         method: "POST",
@@ -77,9 +74,6 @@ export default function JsonEndpoints() {
       JSON.parse(currentItem.json);
 
       const headers: Record<string, string> = { "Content-Type": "application/json" };
-      if (import.meta.env.VITE_API_KEY) {
-        headers["X-API-Key"] = import.meta.env.VITE_API_KEY;
-      }
 
       const response = await fetch("/api/rpc", {
         method: "POST",
@@ -114,9 +108,6 @@ export default function JsonEndpoints() {
   const handleDelete = async (id: string) => {
     try {
       const headers: Record<string, string> = { "Content-Type": "application/json" };
-      if (import.meta.env.VITE_API_KEY) {
-        headers["X-API-Key"] = import.meta.env.VITE_API_KEY;
-      }
 
       const response = await fetch("/api/rpc", {
         method: "POST",
