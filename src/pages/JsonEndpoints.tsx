@@ -20,9 +20,14 @@ export default function JsonEndpoints() {
 
   const fetchItems = async () => {
     try {
+      const headers: Record<string, string> = { "Content-Type": "application/json" };
+      if (import.meta.env.VITE_API_KEY) {
+        headers["X-API-Key"] = import.meta.env.VITE_API_KEY;
+      }
+      
       const response = await fetch("/api/rpc", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers,
         body: JSON.stringify({ type: "readAll" })
       });
       const data = await response.json();
@@ -45,9 +50,14 @@ export default function JsonEndpoints() {
       // Validate JSON
       JSON.parse(currentItem.json);
 
+      const headers: Record<string, string> = { "Content-Type": "application/json" };
+      if (import.meta.env.VITE_API_KEY) {
+        headers["X-API-Key"] = import.meta.env.VITE_API_KEY;
+      }
+
       const response = await fetch("/api/rpc", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers,
         body: JSON.stringify({
           type: "createUpdate",
           payload: currentItem
@@ -77,9 +87,14 @@ export default function JsonEndpoints() {
 
   const handleDelete = async (id: string) => {
     try {
+      const headers: Record<string, string> = { "Content-Type": "application/json" };
+      if (import.meta.env.VITE_API_KEY) {
+        headers["X-API-Key"] = import.meta.env.VITE_API_KEY;
+      }
+
       const response = await fetch("/api/rpc", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers,
         body: JSON.stringify({
           type: "remove",
           payload: { id }

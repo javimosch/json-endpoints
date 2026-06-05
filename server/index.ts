@@ -5,11 +5,90 @@ import { getJsonItems } from "./routes/rpc.ts";
 import { connectDB } from "./utils/db.ts";
 import { JsonEndpointModel } from "./models/JsonEndpoints.ts";
 
+// Parse command line arguments for --env-file
+const args = Deno.args;
+
+// Show help if requested
+if (args.includes("--help") || args.includes("-h")) {
+  console.log(`
+json-endpoints - JSON Endpoints Server
+
+Usage:
+  json-endpoints [options]
+
+Options:
+  --env-file <path>    Load environment variables from specified file
+                       (default: .env in current directory)
+  --help, -h          Show this help message
+
+Environment Variables:
+  MONGODB_URI         MongoDB connection string (required)
+  PORT                Server port (default: 3000)
+  NODE_ENV            Environment mode (default: production)
+  API_KEY             API key for authentication (required for production)
+  REFERER_WHITELIST   Comma-separated list of allowed domains (optional)
+
+Examples:
+  json-endpoints                          # Load .env from current directory
+  json-endpoints --env-file /path/to/.env # Load from custom path
+  MONGODB_URI="..." json-endpoints        # Use system environment
+`);
+  Deno.exit(0);
+}
+
+const envFileIndex = args.indexOf("--env-file");
+let envPath = ".env"; // Default to current directory
+
+if (envFileIndex !== -1 && args[envFileIndex + 1]) {
+  envPath = args[envFileIndex + 1];
+  console.log(`Loading environment from: ${envPath}`);
+}
+
 // Load environment variables from .env file
-await load({ export: true });
+try {
+  await load({ export: true, allowEmptyValues: true, envPath });
+  console.log(`Environment loaded successfully from: ${envPath}`);
+} catch (error) {
+  console.warn(`Warning: Could not load .env file from ${envPath}: ${error instanceof Error ? error.message : String(error)}`);
+  console.log("Continuing with system environment variables...");
+}
 
 const app = new Application();
 const router = new Router();
+
+// API Key middleware
+const API_KEY = Deno.env.get('API_KEY');
+app.use(async (ctx, next) => {
+  // Skip API key check for static files in development
+  if (Deno.env.get("NODE_ENV") !== 'production' && ctx.request.url.pathname.startsWith('/dist')) {
+    await next();
+    return;
+  }
+  
+  // Skip API key check for static files in production (served by Traefik)
+  if (ctx.request.url.pathname === '/' || ctx.request.url.pathname.startsWith('/assets') || ctx.request.url.pathname.endsWith('.html') || ctx.request.url.pathname.endsWith('.css') || ctx.request.url.pathname.endsWith('.js')) {
+    await next();
+    return;
+  }
+  
+  // Require API key for all API routes
+  if (ctx.request.url.pathname.startsWith('/api')) {
+    const providedKey = ctx.request.headers.get('x-api-key');
+    if (!API_KEY) {
+      console.warn('API_KEY not set in environment - allowing all requests (INSECURE)');
+      await next();
+      return;
+    }
+    
+    if (providedKey !== API_KEY) {
+      ctx.response.status = 401;
+      ctx.response.body = { error: "Unauthorized: Invalid API key" };
+      return;
+    }
+  }
+  
+  await next();
+});
 
 // Connect to MongoDB and setup models
 await connectDB();

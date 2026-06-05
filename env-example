@@ -1,1 +1,5 @@
 MONGODB_URI=mongodb://root:xxx@host:27017/json_endpoints?authSource=admin
+PORT=3000
+NODE_ENV=production
+API_KEY=your-secure-api-key-here
+REFERER_WHITELIST=example.com,another.com

@@ -3,13 +3,20 @@
   "private": true,
   "version": "0.0.0",
   "type": "module",
+  "bin": {
+    "json-endpoints": "./cli.js"
+  },
   "scripts": {
     "dev": "vite",
     "build": "vite build",
+    "build:binary": "node build-deno.js",
     "serve": "vite preview",
     "dev:all": "npx -y concurrently \"PORT=3009 deno run --watch --allow-net --allow-read --allow-env --allow-sys server/index.ts\" \"vite\"",
     "lint": "eslint .",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "cli": "node cli.js",
+    "cli:interactive": "node cli.js interactive",
+    "sync:skills": "node scripts/sync-skills.js"
   },
   "dependencies": {
     "@hookform/resolvers": "^3.9.0",
