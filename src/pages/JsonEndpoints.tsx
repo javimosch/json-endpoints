@@ -16,9 +16,13 @@ export default function JsonEndpoints() {
   const [items, setItems] = useState<JsonItem[]>([]);
   const [currentItem, setCurrentItem] = useState<JsonItem>({ title: "", json: "{}" });
   const [isEditing, setIsEditing] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const { toast } = useToast();
 
   const fetchItems = async () => {
+    if (isLoading) return;
+    
+    setIsLoading(true);
     try {
       const headers: Record<string, string> = { "Content-Type": "application/json" };
       if (import.meta.env.VITE_API_KEY) {
@@ -30,14 +34,36 @@ export default function JsonEndpoints() {
         headers,
         body: JSON.stringify({ type: "readAll" })
       });
+      
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.error || `HTTP ${response.status}`);
+      }
+      
       const data = await response.json();
-      setItems(data);
+      
+      // Ensure data is an array before setting state
+      if (Array.isArray(data)) {
+        setItems(data);
+      } else {
+        console.error('Expected array but got:', data);
+        setItems([]);
+        toast({
+          title: "Error",
+          description: "Invalid data format received from server",
+          variant: "destructive"
+        });
+      }
     } catch (error) {
+      console.error('Fetch error:', error);
+      setItems([]);
       toast({
         title: "Error",
-        description: "Failed to fetch items",
+        description: error instanceof Error ? error.message : "Failed to fetch items",
         variant: "destructive"
       });
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -167,37 +193,47 @@ export default function JsonEndpoints() {
       </Card>
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-        {items.map((item) => (
-          <Card key={item.id} className="relative">
-            <CardHeader>
-              <CardTitle className="text-lg">{item.title}</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="h-[200px] border rounded-md">
-                <Editor
-                  height="100%"
-                  defaultLanguage="json"
-                  value={item.json}
-                  options={{
-                    readOnly: true,
-                    minimap: { enabled: false }
-                  }}
-                />
-              </div>
-              <div className="flex gap-2 mt-4">
-                <Button variant="outline" onClick={() => handleEdit(item)}>
-                  Edit
-                </Button>
-                <Button variant="destructive" onClick={() => handleDelete(item.id!)}>
-                  <Trash2 className="h-4 w-4" />
-                </Button>
-                <a href={`/api/jsons/${item.title}.json`} target="_blank" className="text-blue-600 hover:text-blue-800">
-                  View JSON
-                </a>
-              </div>
-            </CardContent>
-          </Card>
-        ))}
+        {isLoading ? (
+          <div className="col-span-full text-center py-8">
+            <p className="text-muted-foreground">Loading...</p>
+          </div>
+        ) : items.length === 0 ? (
+          <div className="col-span-full text-center py-8">
+            <p className="text-muted-foreground">No JSON endpoints found. Create one above.</p>
+          </div>
+        ) : (
+          items.map((item) => (
+            <Card key={item.id} className="relative">
+              <CardHeader>
+                <CardTitle className="text-lg">{item.title}</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="h-[200px] border rounded-md">
+                  <Editor
+                    height="100%"
+                    defaultLanguage="json"
+                    value={item.json}
+                    options={{
+                      readOnly: true,
+                      minimap: { enabled: false }
+                    }}
+                  />
+                </div>
+                <div className="flex gap-2 mt-4">
+                  <Button variant="outline" onClick={() => handleEdit(item)}>
+                    Edit
+                  </Button>
+                  <Button variant="destructive" onClick={() => handleDelete(item.id!)}>
+                    <Trash2 className="h-4 w-4" />
+                  </Button>
+                  <a href={`/api/jsons/${item.title}.json`} target="_blank" className="text-blue-600 hover:text-blue-800">
+                    View JSON
+                  </a>
+                </div>
+              </CardContent>
+            </Card>
+          ))
+        )}
       </div>
     </div>
   );
